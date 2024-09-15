@@ -5,8 +5,10 @@ from flask_cors import CORS
 from db import faqs_collection, users_collection
 from bson import ObjectId
 import requests
+import urllib.parse 
+import quote as url_quote 
 import os
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 
 # Load environment variables from .env file
 load_dotenv()
