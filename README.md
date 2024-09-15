@@ -17,3 +17,7 @@ PUT /faqs/<id> - Update FAQ by ID (Requires authentication)
 DELETE /faqs/<id> - Delete FAQ by ID (Requires authentication)
 POST /api/detect - Detect language of text
 POST /api/translate - Translate text
+
+
+To start the file with the help of command 
+python app.py
