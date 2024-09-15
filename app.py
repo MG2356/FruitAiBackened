@@ -5,6 +5,11 @@ from flask_cors import CORS
 from db import faqs_collection, users_collection
 from bson import ObjectId
 import requests
+import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 app = Flask(__name__)
 
@@ -15,8 +20,8 @@ CORS(app)
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 
-# Secret key for JWT (you should use a secure, random key in production)
-app.config['JWT_SECRET_KEY'] = 'your_jwt_secret_key'
+# Secret key for JWT
+app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
 
 # User Registration
 @app.route('/signup', methods=['POST'])
@@ -50,7 +55,7 @@ def login():
 
 # GET /faqs
 @app.route('/faqs', methods=['GET'])
-##@jwt_required()
+# @jwt_required()
 def get_faqs():
     faqs = list(faqs_collection.find({}))
     for faq in faqs:
@@ -98,7 +103,6 @@ def update_faq(id):
         return jsonify(updated_faq)
     return jsonify({"error": "FAQ not found"}), 404
 
-
 # DELETE /faqs/:id
 @app.route('/faqs/<id>', methods=['DELETE'])
 @jwt_required()
@@ -116,7 +120,7 @@ def detect_language():
 
     url = 'https://google-translator9.p.rapidapi.com/v2/detect'
     headers = {
-        'x-rapidapi-key': 'a69d10823fmsh988616887de66b9p11ad97jsn9dbaf876f131',
+        'x-rapidapi-key': os.getenv('RAPIDAPI_KEY'),
         'x-rapidapi-host': 'google-translator9.p.rapidapi.com',
         'Content-Type': 'application/json'
     }
@@ -136,7 +140,7 @@ def translate_text():
 
     url = 'https://google-translator9.p.rapidapi.com/v2'
     headers = {
-        'x-rapidapi-key': 'a69d10823fmsh988616887de66b9p11ad97jsn9dbaf876f131',
+        'x-rapidapi-key': os.getenv('RAPIDAPI_KEY'),
         'x-rapidapi-host': 'google-translator9.p.rapidapi.com',
         'Content-Type': 'application/json'
     }
@@ -149,4 +153,4 @@ def translate_text():
     return jsonify(response.json())
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
